@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="css/iconfont.css">
     <link rel="stylesheet" href="css/main.css">
     <script src="./libs/jquery-1.12.4.min.js"></script>
-
+    <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./libs/http.js"></script>
 </head>
 
 <body>
@@ -68,6 +69,83 @@
             </form>
         </div>
     </div>
+    <!-- 弹出的模态框 -->
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">温馨提示</h4>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+<script>
+    //获取ajax用户详细信息
+    $(function () {
+        $.ajax({
+            type: 'get',
+            url: BigNew.user_detail,
+            success: function (backData) {
+
+
+                if (backData.code == 200) {
+                    // $('input.username').val(backData.data.username);
+                    // $('input.nickname').val(backData.data.nickname);
+                    // $('input.email').val(backData.data.email);
+                    // $('input.password').val(backData.data.password);
+                    //优化循环
+                    for (var key in backData.data) {
+                        $('input.' + key).val(backData.data[key])
+                    }
+                    $('img.user_pic').attr('src', backData.data.userPic)
+                }
+            }
+        })
+        //修改头像图片进行预览
+        $('#exampleInputFile').on('change', function () {
+            var file1 = this.files[0]
+
+            var url = URL.createObjectURL(file1);
+            $('img.user_pic').attr('src', url)
+        })
+        //提交修改
+        $('.btn-edit').on('click', function (e) {
+            e.preventDefault();
+            var form1 = document.querySelector('#form');
+            var fd = new FormData(form1);
+
+            $.ajax({
+                type: 'post',
+                url: BigNew.user_edit,
+                data: fd,
+                contentType: false,
+                processData: false,
+                success: function (backData) {
+                    if (backData.code == 200) {
+                        $('.modal-body').text('更新成功');
+                        $('#myModal').modal();
+                        $('#myModal').on('hidden.bs.modal', function (e) {
+                            parent.window.location.reload();
+
+                        })
+
+                    }
+                }
+
+            })
+        })
+    })
+</script>
 
 </html>

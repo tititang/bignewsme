@@ -32,7 +32,8 @@
                         class="iconfont icon-icon-article"></i><span>文章管理</span><b
                         class="iconfont icon-arrowdownl"></b></a></div>
             <ul class="level02">
-                <li><a href="#" target="main_frame"><i class="iconfont icon-previewright"></i><span>文章列表</span></a></li>
+                <li><a href="./article_list.html" target="main_frame"><i
+                            class="iconfont icon-previewright"></i><span>文章列表</span></a></li>
                 <li><a href="./article_edit.html" target="main_frame"><i
                             class="iconfont icon-previewright"></i><span>发表文章</span></a></li>
                 <li><a href="./article_category.html" target="main_frame"><i
@@ -60,6 +61,7 @@
         </div>
     </div>
 </body>
+<script src="./libs/http.js"></script>
 <script>
     $(function () {
         //一进到首页就发送
@@ -87,11 +89,24 @@
 
         })
         //给左侧导航栏设置点击事件
-        $('.menu>div.level01').on('click',function(){
+        $('.menu>div.level01').on('click', function () {
             //1.点击到的导航让他的背景色变成蓝色
             $(this).addClass('active').siblings('div').removeClass('active')
-            //heihei
+            //点击到文章管理时候让ul放出来
+            if ($(this).index() == 1) {
+                $('.menu>.level02').slideToggle();
+                $(this).find('b').toggleClass('rotate0');
+                $('ul.level02>li:eq(0)').trigger('click');
+            }
+
+            //给文章管理设置二级菜单事件
+            $('ul.level02>li').on('click', function () {
+            $(this).addClass('active').siblings('li').removeClass('active')
+            })
+
         })
+       
+    })
 </script>
 
 </html>
