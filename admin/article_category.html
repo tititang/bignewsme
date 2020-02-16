@@ -129,12 +129,11 @@
                 $('#hide999').val($(e.relatedTarget).attr('data-id'))
             }
         })
-        //给模态框设置新增点击事件,发送ajax请求
+        //给模态框设置点击事件,发送ajax请求
         $('#AddorEdit').on('click', function () {
             var recipientname = $('#recipient-name').val().trim();
             var messagetext = $('#message-text').val().trim();
             if ($('#AddorEdit').hasClass('btn-success')) {
-
                 //发送新增请求
                 $.ajax({
                     type: 'post',
@@ -150,6 +149,25 @@
                             $('#recipient-name').val('')
                             $('#message-text').val('')
                         }
+                    }
+                })
+            }
+            else {
+                //发送编辑请求
+                var cateid = $('#hide999').val();
+                var catename = $('#recipient-name').val();
+                var cateslug = $('#recipient-name').val()
+                $.ajax({
+                    type: 'post',
+                    url:BigNew.category_edit,
+                    data:{
+                        id:cateid,
+                        name:catename,
+                        slug:cateslug
+                    },
+                    success:function(backData){
+                        $('#myModal').modal('hide');
+                            getData();
                     }
                 })
             }
