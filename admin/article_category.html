@@ -62,6 +62,7 @@
                     <h4 class="modal-title" id="exampleModalLabel">新增分类</h4>
                 </div>
                 <div class="modal-body">
+                    <input type="hidden" name="" id="hide999">
                     <form>
                         <div class="form-group">
                             <label for="recipient-name" class="control-label">分类名称</label>
@@ -123,6 +124,9 @@
             } else {
                 $('#exampleModalLabel').text('编辑分类')
                 $('#AddorEdit').text('编辑').addClass('btn-primary').removeClass('btn-success')
+                $('#recipient-name').val($(e.relatedTarget).parent().prev().prev().text().trim());
+                $('#message-text').val($(e.relatedTarget).parent().prev().text().trim());
+                $('#hide999').val($(e.relatedTarget).attr('data-id'))
             }
         })
         //给模态框设置新增点击事件,发送ajax请求
@@ -146,8 +150,6 @@
                             $('#recipient-name').val('')
                             $('#message-text').val('')
                         }
-
-
                     }
                 })
             }
