@@ -93,7 +93,8 @@
     <td class="text-center">
         <a href="javascript:void(0)" data-toggle="modal" data-target="#myModal" class=" btn btn-info btn-xs"
             data-id='{{v.id}}'>编辑</a>
-        <a href="javascript:void(0)" class="btn btn-danger btn-xs" data-id='{{v.id}}' data-target="#myModal">删除</a>
+        <a href="javascript:void(0)" class="btn btn-danger btn-xs btn-del" data-id='{{v.id}}'
+            data-target="#myModal">删除</a>
     </td>
 </tr>
 {{/each}}
@@ -129,7 +130,7 @@
                 $('#hide999').val($(e.relatedTarget).attr('data-id'))
             }
         })
-        //给模态框设置点击事件,发送ajax请求
+        //给模态框设置新增或编辑点击事件,发送ajax请求
         $('#AddorEdit').on('click', function () {
             var recipientname = $('#recipient-name').val().trim();
             var messagetext = $('#message-text').val().trim();
@@ -159,18 +160,43 @@
                 var cateslug = $('#recipient-name').val()
                 $.ajax({
                     type: 'post',
-                    url:BigNew.category_edit,
-                    data:{
-                        id:cateid,
-                        name:catename,
-                        slug:cateslug
+                    url: BigNew.category_edit,
+                    data: {
+                        id: cateid,
+                        name: catename,
+                        slug: cateslug
                     },
-                    success:function(backData){
+                    success: function (backData) {
                         $('#myModal').modal('hide');
-                            getData();
+                        getData();
                     }
                 })
             }
+        })
+        //给模态框的取消按钮设置点击事件
+        $('.btn-default').on('click', function () {
+            $('#myModal form')[0].reset();
+        })
+        //设置文章分类管理删除事件
+        $('tbody').on('click', '.btn-del', function () {
+            if (confirm('确定要删除吗')) {
+                //发送删除ajax请求
+                var delid = $(this).attr('data-id')
+                $.ajax({
+                    type: 'post',
+                    url: BigNew.category_delete,
+                    data: {
+                        id: delid
+                    },
+                    success: function (backData) {
+                        // 
+                        if(backData.code==204){
+                            getData();
+                        }
+                        
+                    }
+                })
+                }
         })
     })
 </script>
